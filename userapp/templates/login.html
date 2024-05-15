@@ -1,0 +1,95 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container">
+          <a class="navbar-brand" href="{%url 'home_page'%}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="#0d6efd" class="bi bi-calendar-check-fill" viewBox="0 0 16 16">
+                <path d="M4 .5a.5.5 0 0 0-1 0V1H2a2 2 0 0 0-2 2v1h16V3a2 2 0 0 0-2-2h-1V.5a.5.5 0 0 0-1 0V1H4zM16 14V5H0v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2m-5.146-5.146-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708.708"/>
+            </svg>
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0 ms-5 nav-underline">
+              <li class="nav-item">
+                <a class="nav-link text-primary active" aria-current="page" href="{%url 'login_page'%}">Login</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-primary" href="{%url 'registration_page'%}">Register</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      {%if messages%}
+      {%for message in messages%}
+      <label id="success_message" hidden>{{message}}</label>
+      {%endfor%}
+      {%endif%}
+
+<div class="login-container">
+    <h2 class="text-center mb-4">Login</h2>
+    <form method="post">
+      {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
+
+</body>
+
+<script>
+function showSuccessMessage(message) {
+  var alertDiv = document.createElement("div");
+  if (message == "Registration Successful. Please login.") {
+    alertDiv.className = "alert alert-success";
+  }
+  else if (message == "Invalid username or password.") {
+    alertDiv.className = "alert alert-danger";
+  }
+    alertDiv.innerHTML = message;
+
+
+    var loginContainer = document.querySelector(".login-container");
+    loginContainer.insertBefore(alertDiv, loginContainer.firstChild);
+
+    setTimeout(function() {
+        alertDiv.classList.add("alert-show");
+    }, 100);
+
+    setTimeout(function() {
+        alertDiv.classList.remove("alert-show");
+        setTimeout(function() {
+            alertDiv.remove();
+        }, 500);
+    }, 4000);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    var successMessage = document.getElementById("success_message").textContent;
+    if (successMessage.trim() !== "") { 
+        showSuccessMessage(successMessage);
+    }
+});
+</script>
+
+
+</html>
